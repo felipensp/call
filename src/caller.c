@@ -5,7 +5,7 @@
 #include <errno.h>
 #include "caller.h"
 
- static long call_with_0_arg(CALL_ARGS)
+inline static long call_with_0_arg(CALL_ARGS)
 {
 	long ret;
 #ifdef __x86_64__
@@ -79,12 +79,12 @@ inline static long call_with_3_arg(CALL_ARGS)
 	return ret;
 }
 
-inline static int is_illegal_pointer(void *ptr)
+static int is_illegal_pointer(void *ptr)
 {
 	int ret = 0;
 	int randomfd = open("/dev/random", O_WRONLY);
 
-	if (write(randomfd, ptr, sizeof(void*)) == -1 && errno == 14) /* EFAULT */
+	if (write(randomfd, ptr, sizeof(void*)) == -1 && errno == EFAULT)
 		ret = 1;
 	close(randomfd);
 
