@@ -5,7 +5,7 @@ void* load_object(const char *objfile)
 {
 	void *handle;
 
-	handle = dlopen(objfile, RTLD_LOCAL | RTLD_LAZY);
+	handle = dlopen(objfile, RTLD_GLOBAL | RTLD_LAZY);
 
 	return handle;
 }
