@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <dlfcn.h>
+#include <bfd.h>
 #include "loader.h"
 #include "caller.h"
 
@@ -20,13 +21,18 @@ int main(int argc, char **argv)
 	}
 
 	if (object == NULL || func == NULL) {
-		printf("%s\n", dlerror());
-		return 1;
+		func = get_func_addr(argv[1], argv[2]);
+		if (!func) {
+			printf("Function not found!\n");
+			return 1;
+		}
 	}
 
 	caller(func, argc, argv);
 
-	dlclose(object);
+	if (object) {
+		dlclose(object);
+	}
 
 	return 0;
 }

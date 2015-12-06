@@ -13,7 +13,7 @@ call: $(SRC)/*.c $(INC)/*.h
 	$(CXX) -fPIC -g -ggdb -c -Wall -std=c++11 -I$(INC)/ -o$(BLD)/caller.o $(SRC)/caller.c
 	$(CXX) -fPIC -g -ggdb -c -Wall -std=c++11 -I$(INC)/ -o$(BLD)/main.o $(SRC)/main.c
 
-	$(CXX) -o$(PROGRAM) $(OBJS) -ldl
+	$(CXX) -o$(PROGRAM) $(OBJS) -ldl -lbfd
 
 clean:
 	rm -rf $(PROGRAM) $(OBJS)
