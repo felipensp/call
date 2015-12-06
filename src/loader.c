@@ -1,3 +1,7 @@
+/*
+ * Author: Felipe Pena <felipensp at gmail.com>
+ */
+
 #include <dlfcn.h>
 #include <bfd.h>
 #define HAVE_DECL_BASENAME 1

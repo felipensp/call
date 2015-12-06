@@ -1,3 +1,7 @@
+/*
+ * Author: Felipe Pena <felipensp at gmail.com>
+ */
+
 #include <stdio.h>
 #include <sys/stat.h>
 #include <fcntl.h>
