@@ -14,14 +14,20 @@ inline static long call_with_0_arg(CALL_ARGS)
 	long ret;
 #ifdef __x86_64__
 	__asm__ __volatile__ (
-		"xor %%rax,%%rax\n\t"
+		"xor %%rax, %%rax\n\t"
 		"call *%1\n\t"
 		"movq %%rax, %0"
 		: "=r" (ret)
 		: "r" (func)
 		: "rax");
 #else
-#error Architecture not supported yet
+	__asm__ __volatile__ (
+		"xorl %%eax, %%eax\n\t"
+		"call *%1\n\t"
+		"movl %%eax, %0"
+		: "=r" (ret)
+		: "r" (func)
+		: "eax");
 #endif
 	return ret;
 }
@@ -31,15 +37,23 @@ inline static long call_with_1_arg(CALL_ARGS)
 	long ret;
 #ifdef __x86_64__
 	__asm__ __volatile__ (
-		"movq %2,%%rdi\n\t"
-		"xor %%rax,%%rax\n\t"
+		"movq %2, %%rdi\n\t"
+		"xor %%rax, %%rax\n\t"
 		"call *%1\n\t"
 		"movq %%rax, %0"
 		: "=r" (ret)
 		: "r" (func), "m" (argv[3])
 		: "rax", "rcx", "rdi");
 #else
-#error Architecture not supported yet
+	__asm__ __volatile__ (
+		"push %2\n\t"
+		"xorl %%eax, %%eax\n\t"
+		"call *%1\n\t"
+		"movl %%eax, %0\n\t"
+		"addl $4, %%esp\n\t"
+		: "=r" (ret)
+		: "r" (func), "m" (argv[3])
+		: "eax");
 #endif
 	return ret;
 }
@@ -58,7 +72,16 @@ inline static long call_with_2_arg(CALL_ARGS)
 		: "r" (func), "m" (argv[3]), "m" (argv[4])
 		: "rax", "rcx", "rsi", "rdi");
 #else
-#error Architecture not supported yet
+	__asm__ __volatile__ (
+		"push %3\n\t"
+		"push %2\n\t"
+		"xorl %%eax, %%eax\n\t"
+		"call *%1\n\t"
+		"movl %%eax, %0\n\t"
+		"addl $8, %%esp"
+		: "=r" (ret)
+		: "r" (func), "m" (argv[3]), "m" (argv[4])
+		: "eax");
 #endif
 	return ret;
 }
@@ -78,7 +101,17 @@ inline static long call_with_3_arg(CALL_ARGS)
 		: "r" (func), "m" (argv[3]), "m" (argv[4]), "m" (argv[5])
 		: "rax", "rcx", "rdx", "rsi", "rdi");
 #else
-#error Architecture not supported yet
+	__asm__ __volatile__ (
+		"pushl %4\n\t"
+		"pushl %3\n\t"
+		"pushl %2\n\t"
+		"xorl %%eax, %%eax\n\t"
+		"call *%1\n\t"
+		"movl %%eax, %0\n\t"
+		"add $12, %%esp"
+		: "=r" (ret)
+		: "r" (func), "m" (argv[3]), "m" (argv[4]), "m" (argv[5])
+		: "eax");
 #endif
 	return ret;
 }
